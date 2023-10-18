@@ -1,0 +1,35 @@
+.background-image {
+	background-image: url('https://i.ytimg.com/vi/D5GuUKC-LLc/maxresdefault.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: fixed; /* Para cobrir toda a tela */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Coloca a imagem de fundo atrás do conteúdo */
+	
+}
+
+.background-image::before {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.6); /* Cor preta com opacidade (0.5) */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Coloca a imagem de fundo atrás de todo o conteúdo */
+}
+
+.poster {
+    height: 100%;
+    width: 100%;
+    color: red;
+    
+}
+
+p {
+	text-align: justify;
+}

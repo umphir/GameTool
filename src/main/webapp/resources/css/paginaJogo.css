@@ -1,0 +1,40 @@
+.background-image {
+	background-image: url('https://assets.editorial.aetnd.com/uploads/2009/11/halloween-gettyimages-1424736925.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: fixed; /* Para cobrir toda a tela */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Coloca a imagem de fundo atrás do conteúdo */
+	
+}
+
+.background-image::before {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.6); /* Cor preta com opacidade (0.5) */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Coloca a imagem de fundo atrás de todo o conteúdo */
+}
+
+.posteres {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%; 
+    object-fit: contain;
+  	background: rgba(0, 0, 0, 0.7); 
+   	backdrop-filter: blur(4px);
+   }
+
+.poster {
+    width: 100%;
+    color: red;
+    object-fit: contain;
+}

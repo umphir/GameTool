@@ -1,0 +1,158 @@
+DROP SEQUENCE jogo_sequence;
+DROP TRIGGER tr_insert_cod_jogo;
+drop table jogo cascade constraints;
+drop table CategoriaJogo cascade constraints;
+drop table empresa cascade constraints;
+drop table feedback_jogo cascade constraints;
+drop table usuario_jogo cascade constraints;
+DROP SEQUENCE empresa_sequence;
+DROP TRIGGER tr_insert_cod_empresa;
+DROP SEQUENCE usuario_jogo_sequence;
+DROP TRIGGER tr_insert_cod_usuario_jogo;
+DROP SEQUENCE categoria_jogo_sequence;
+DROP TRIGGER tr_insert_cod_categoria_jogo;
+DROP SEQUENCE feedback_jogo_sequence;
+DROP TRIGGER tr_insert_id_feedback_jogo;
+
+create table CategoriaJogo(
+    cod_categoria number(6) CONSTRAINT categoria_id_pk PRIMARY KEY,
+    nome_Categoria VARCHAR2(25) CONSTRAINT categoria_tipo_uk UNIQUE
+);
+   
+CREATE TABLE jogo (
+    cod_jogo   NUMBER(6) CONSTRAINT jogo_id_pk PRIMARY KEY,
+    nome_jogo VARCHAR2(25) NOT NULL,
+    empresa_cod number (6) not null,
+    categoria number(6) not null,
+    nota_jogo number(6),
+    img_poster varchar2(500),
+    img_slide varchar2(500),
+    jogo_descricao varchar2(500)
+   );
+  
+  CREATE TABLE feedback_jogo(
+    idFeedback number(6) CONSTRAINT feedback_id_pk PRIMARY KEY,
+    descricao varchar(1000),
+    data_feedback date not null,
+   notaJogo number(6) not null,
+   idUsuario number(6) not null,
+   idJogo number(6) not null
+);
+
+   create table usuario_jogo (
+    id_usuario   NUMBER(6) CONSTRAINT usuario_id_jogo_pk PRIMARY KEY,
+    nome_usuario VARCHAR2(25) NOT NULL,
+    data_nasc     date NOT NULL,
+    email_cliente VARCHAR2(50) CONSTRAINT email_cliente_jogo_uk UNIQUE,
+    senha_cliente VARCHAR2(50)NOT NULL
+   );
+
+    create table empresa(
+    cod_empresa number(6) CONSTRAINT empresa_id_pk PRIMARY KEY,
+    nome_empresa VARCHAR2(25) CONSTRAINT empresa_tipo_uk UNIQUE
+);
+       ALTER TABLE jogo
+    ADD CONSTRAINT jogo_empresa_fk FOREIGN KEY ( empresa_cod )
+        REFERENCES empresa ( cod_empresa );
+        
+            ALTER TABLE jogo
+    ADD CONSTRAINT jogo_categoria_fk FOREIGN KEY ( categoria )
+        REFERENCES CategoriaJogo ( cod_categoria );
+        
+      ALTER TABLE feedback_jogo
+    ADD CONSTRAINT feedback_usuario_fk FOREIGN KEY ( idUsuario )
+        REFERENCES usuario_jogo ( id_usuario );
+
+        ALTER TABLE feedback_jogo
+    ADD CONSTRAINT feedback_jogo_fk FOREIGN KEY ( idJogo )
+        REFERENCES jogo ( cod_jogo );
+        
+
+
+CREATE SEQUENCE jogo_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER tr_insert_cod_jogo
+BEFORE INSERT ON jogo FOR EACH ROW       
+BEGIN
+ 
+SELECT jogo_sequence.NEXTVAL
+INTO :NEW.cod_jogo
+FROM DUAL;
+END;
+/
+--trigguer acima foi de cod_jogo
+
+CREATE SEQUENCE empresa_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER tr_insert_cod_empresa
+BEFORE INSERT ON empresa FOR EACH ROW       
+BEGIN
+ 
+SELECT empresa_sequence.NEXTVAL
+INTO :NEW.cod_empresa
+FROM DUAL;
+END;
+/ 
+-- trigguer acima foi de cod_empresa
+
+CREATE SEQUENCE usuario_jogo_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER tr_insert_cod_usuario_jogo
+BEFORE INSERT ON usuario_jogo FOR EACH ROW       
+BEGIN
+ 
+SELECT usuario_jogo_sequence.NEXTVAL
+INTO :NEW.id_usuario
+FROM DUAL;
+END;
+/
+-- feito para id_uuario de usuario_jogo
+
+CREATE SEQUENCE categoria_jogo_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER tr_insert_cod_categoria_jogo
+BEFORE INSERT ON CategoriaJogo FOR EACH ROW       
+BEGIN
+
+SELECT categoria_jogo_sequence.NEXTVAL
+INTO :NEW.cod_categoria
+FROM DUAL;
+END;
+/
+
+-- feito para id_uuario de feedback_jogo
+
+CREATE SEQUENCE feedback_jogo_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER tr_insert_cod_feedback_jogo
+BEFORE INSERT ON Feedback_Jogo FOR EACH ROW       
+BEGIN
+ 
+SELECT feedback_jogo_sequence.NEXTVAL
+INTO :NEW.idFeedback
+FROM DUAL;
+END;
+/
+
+insert into empresa (nome_empresa) VALUES('EA Games');
+insert into empresa (nome_empresa) VALUES('Rockstar');
+insert into empresa (nome_empresa) VALUES('Riot Games');
+
+insert into usuario_jogo (nome_usuario, data_nasc, email_cliente, senha_cliente) VALUES('Fabiano Luiz Santos', '25/04/2001','fabiano@outlook.com','123456');
+insert into usuario_jogo (nome_usuario, data_nasc, email_cliente, senha_cliente) VALUES('Sergio Ricardo Rota', '12/03/1980','sergio@outlook.com','123456');
+
+insert into categoriajogo (nome_categoria) VALUES('Ação');
+insert into categoriajogo (nome_categoria) VALUES('RPG');
+
+insert into feedback_jogo (descricao, data_feedback, notajogo, idusuario, idjogo)VALUES ('Free Fire é lento.', '07-10-2023', 4, 1, 1);
+
+insert into JOGO (nome_jogo, empresa_cod, categoria, nota_jogo, img_slide)
+VALUES('Free Fire', 1, 1, 2, 'https://s2-techtudo.glbimg.com/9j5o1JxPwZOpeU-DTlrhaxJgmEs=/0x0:1440x810/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2019/q/a/v5m2fxSNOACMCf4184JA/004.jpg');
+
+insert into JOGO (nome_jogo, empresa_cod, categoria, nota_jogo, img_slide)
+VALUES('GTA', 3, 2, 2, 'https://assets.xboxservices.com/assets/0b/17/0b179504-412d-4af7-9e00-3e3d92633577.jpg?n=GTA-V_GLP-Page-Hero-1084_1920x1080.jpg');
+
+insert into JOGO (nome_jogo, empresa_cod, categoria, nota_jogo, img_slide, img_poster)
+VALUES('Valorant', 3, 1, 2, 'https://t.ctcdn.com.br/q76mfKrdLk8n7NDwQlUTxDAFBFE=/8000x4500/smart/i556613.jpeg', '');
+
+commit;
